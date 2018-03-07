@@ -13,10 +13,6 @@ jobs:
 
       - run:
           name: Build docker image and push to registry
-          command: npm install
-
-      - run:
-          name: Build docker image and push to registry
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then FIREBASE_ALIAS="production"; fi
             if [ "${CIRCLE_BRANCH}" == "devel" ]; then FIREBASE_ALIAS="staging"; fi
