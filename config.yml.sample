@@ -1,0 +1,29 @@
+# PHP CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/ for more details
+#
+version: 2
+jobs:
+  build-job:
+    docker:
+      # specify the version you desire here
+      - image: beecomprg/docker-circleci-firebase-deploy
+    steps:
+      - checkout
+
+      - run:
+          name: Build docker image and push to registry
+          command: npm install
+
+      - run:
+          name: Build docker image and push to registry
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then FIREBASE_ALIAS="production"; fi
+            if [ "${CIRCLE_BRANCH}" == "devel" ]; then FIREBASE_ALIAS="staging"; fi
+            firebase deploy -P ${FIREBASE_ALIAS} --only hosting --token ${FIREBASE_TOKEN}
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build-job
